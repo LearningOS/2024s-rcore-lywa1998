@@ -12,6 +12,12 @@ pub struct TaskContext {
     s: [usize; 12],
 }
 
+impl Default for TaskContext {
+    fn default() -> Self {
+        Self { ra: Default::default(), sp: Default::default(), s: [0; 12] }
+    }
+}
+
 impl TaskContext {
     /// Create a new empty task context
     pub fn zero_init() -> Self {
