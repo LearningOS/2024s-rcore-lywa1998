@@ -27,6 +27,7 @@ extern crate log;
 
 extern crate alloc;
 
+mod board;
 #[macro_use]
 mod console;
 pub mod config;
@@ -40,6 +41,8 @@ pub mod syscall;
 pub mod task;
 pub mod timer;
 pub mod trap;
+
+use board::qemu::QEMUExit;
 
 core::arch::global_asm!(include_str!("entry.asm"));
 core::arch::global_asm!(include_str!("link_app.S"));
@@ -94,7 +97,7 @@ fn kernel_log_info() {
 
 #[no_mangle]
 /// the rust entry-point of os
-pub fn rust_main() -> ! {
+pub fn rust_main() {
     clear_bss();
     kernel_log_info();
     heap_alloc::init_heap();
@@ -103,5 +106,5 @@ pub fn rust_main() -> ! {
     trap::enable_timer_interrupt();
     timer::set_next_trigger();
     task::run_first_task();
-    panic!("Unreachable in rust_main!");
+    board::qemu::QEMU_EXIT_HANDLE.exit_success();
 }

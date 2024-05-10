@@ -53,7 +53,7 @@ impl TaskControlBlock {
         TaskInfo { 
             status: self.task_status, 
             syscall_times: self.syscal_times.clone(), 
-            time: self.time.unwrap_or(0)
+            time: get_time_ms() - self.time.unwrap_or(0)
         }
     }
 }
